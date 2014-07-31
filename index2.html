@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<title>touch</title>
+<link href="css/default.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="js/processing.js"></script>
+<script type="text/javascript" src="js/excanvas.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+var canvas = document.getElementsByTagName('canvas')[0];
+var codeElm = document.getElementById('processing-code');
+var code = codeElm.textContent || codeElm.innerText;
+Processing(canvas, code);
+};
+</script>
+<script id="processing-code" type="application/processing">
+int count = 0;
+Particle[] particles;
+int numParticle = 10;
+
+void setup() {
+  background(0);
+  size(320, 480);
+  noStroke();
+  frameRate(30);
+  particles = new Particle[numParticle];
+  for (int i = 0; i < numParticle; i ++) {
+    particles[i] = new Particle(160,240);
+  }
+}
+
+void draw() {
+  background(0);
+  for (int i = 0; i < numParticle; i ++) {
+    particles[i].update();
+  }
+  float di,mp;
+  Particle p1, p2;
+  for (int i = 0; i < numParticle; i ++) {  
+    for (int j = i; j < numParticle; j ++) {
+
+      p1 = particles[i];
+      p2 = particles[j];
+      if (p1.life !=0 && p2.life != 0) {
+        di = sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+        p1.vx = (p1.vx + (p2.x - p1.x) / 1000);
+        p1.vy = (p1.vy + (p2.y - p1.y) / 1000);
+        p2.vx = (p2.vx + (p1.x - p2.x) / 1000);
+        p2.vy = (p2.vy + (p1.y - p2.y) / 1000);
+      }
+    }
+  }
+
+
+
+}
+
+void initParticle(int x, int y) {
+  for (int i = 0; i < 5; i ++) {
+    particles[count] = new Particle(x,y);
+    count = (count + 1) % numParticle;
+  }
+}
+
+void mousePressed() {
+  initParticle(mouseX, mouseY);
+}
+
+class Particle {
+  float x,y,r,s,spd;
+  float vx,vy;
+  int life = 50;
+  int r = (int) random(255);
+  int g = (int) random(255);
+  int b = (int) random(255);
+  
+  Particle(float _x,float _y) {
+    x = _x;
+    y = _y;
+    ra = random(2 * PI);
+    s = random(50) + 4;
+    spd = random(10) + 2;
+    vx = cos(ra) * spd;
+    vy = sin(ra) * spd;
+  }
+
+  void update() {
+    if (life <= 0) {
+      return;
+    }
+    x += vx;
+    y += vy;
+    if (x > width) {
+      x -= width;
+    }
+    if (x < 0) {
+      x += width;
+    }
+    if (y > height) {
+      y -= height;
+    }
+    if (y < 0) {
+      y += height;
+    }
+
+    fill(r, g, b, 255 / 50 * life);
+    ellipse(x, y, s, s);
+    life --;
+  }
+}</script>
+</head>
+<body>
+<canvas width="400" height="400"></canvas>
+</body>
+</html>

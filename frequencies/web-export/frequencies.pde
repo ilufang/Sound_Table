@@ -22,7 +22,7 @@ void setup() {
 void draw() {
   background(0);
   stroke(255);
-  
+  /*
   strokeWeight(1);
   
   // draw the waveform of the output
@@ -40,9 +40,9 @@ void draw() {
   {
     point( i, height/2 - (height*0.49) * wave.getWaveform().value( (float)i / width ) );
   }
-  
+  */
 }
-
+/*
 void mouseMoved()
 {
   // usually when setting the amplitude and frequency of an Oscil
@@ -86,4 +86,5 @@ void keyPressed()
   }
   
 }
+*/
 
