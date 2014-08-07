@@ -628,6 +628,10 @@ boolean drawOnScreen(){
 
 void mouseWheel(MouseEvent event) {
   drawSize += event.getCount();
+  if (drawSize <= 0)
+  {
+    drawSize = 0;
+  }
 }
 
 void keyPressed(){
